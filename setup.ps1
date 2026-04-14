@@ -1,21 +1,21 @@
 Write-Host "=================================="
 Write-Host " Polymarket Claude Sniper - Setup"
 Write-Host "=================================="
-Write-Host "Bitte gib deine API Keys und Credentials an. Druecke Enter, um einen Wert leer zu lassen."
+Write-Host "Please provide your API Keys and Credentials. Press Enter to leave a value empty."
 Write-Host ""
 
 $polyKey = Read-Host "Polymarket Private Key (0x...)"
 $polyFunder = Read-Host "Polymarket Funder / Public Address (0x...)"
-$polyRpc = Read-Host "Polygon RPC URL (z.B. Alchemy) (https://...)"
+$polyRpc = Read-Host "Polygon RPC URL (e.g. Alchemy) (https://...)"
 $binanceKey = Read-Host "Binance API Key"
 $binanceSecret = Read-Host "Binance Secret Key"
-$claudeModel = Read-Host "Welches KI-Modell soll genutzt werden? (Standard: claude-3-7-sonnet-20250219)"
+$claudeModel = Read-Host "Which AI model should be used? (Default: claude-3-7-sonnet-20250219)"
 
 if ([string]::IsNullOrWhiteSpace($claudeModel)) {
     $claudeModel = "claude-3-7-sonnet-20250219"
 }
 
-Write-Host "`nErstelle .env Datei..."
+Write-Host "`nCreating .env file..."
 $envTemplate = @"
 # ============================================================
 # TRADING MODE
@@ -63,10 +63,10 @@ MAX_TOKEN_PRICE=0.65
 ORACLE_SOURCE=polymarket
 "@
 $envTemplate | Out-File -FilePath .env -Encoding UTF8
-Write-Host "[OK] .env erfolgreich erstellt."
+Write-Host "[OK] .env successfully created."
 
 
-Write-Host "`nErstelle .mcp.json Datei..."
+Write-Host "`nCreating .mcp.json file..."
 $mcpTemplate = @"
 {
   "mcpServers": {
@@ -96,24 +96,24 @@ $mcpTemplate = @"
 }
 "@
 $mcpTemplate | Out-File -FilePath .mcp.json -Encoding UTF8
-Write-Host "[OK] .mcp.json erfolgreich erstellt."
+Write-Host "[OK] .mcp.json successfully created."
 
-Write-Host "`nAktualisiere Model in run.bat..."
+Write-Host "`nUpdating model in run.bat..."
 if (Test-Path run.bat) {
     (Get-Content run.bat) -replace '--model \S+', "--model $claudeModel" | Out-File run.bat -Encoding UTF8
-    Write-Host "[OK] run.bat Model gesetzt auf: $claudeModel"
+    Write-Host "[OK] run.bat model set to: $claudeModel"
 }
 
-Write-Host "`nInstalliere Python Abhängigkeiten..."
+Write-Host "`nAutomatically installing Python dependencies (pip)..."
 pip install -r requirements.txt
 
-Write-Host "`nInstalliere und Baue Polymarket MCP (Node.js)..."
+Write-Host "`nAutomatically installing and building Polymarket MCP (Node.js)..."
 Set-Location mcp_servers\polymarket-mcp
 npm install
 npm run build
 Set-Location ..\..
 
 Write-Host "`n=================================="
-Write-Host "Setup Abgeschlossen! Starte den Bot mit run.bat"
+Write-Host "Setup Complete! Start the bot with run.bat"
 Write-Host "=================================="
-cmd /c echo Setup abgeschlossen, schliesse dieses Fenster.
+cmd /c echo Setup complete, close this window.
