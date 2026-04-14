@@ -1,127 +1,127 @@
 # 🎯 Polymarket Claude Sniper
 
-Ein vollautomatisierter AI-Trading-Bot, der direkt über Anthropic's **Claude Code** auf der Polymarket-Prognoseplattform handelt. Gestützt durch Echtzeitdaten von Binance und die Leistungsfähigkeit moderner Large Language Models (LLMs).
+A fully automated AI trading bot that trades directly on the Polymarket prediction platform using Anthropic's **Claude Code**. Powered by real-time data from Binance and the reasoning capabilities of modern Large Language Models (LLMs).
 
 ---
 
-## 📖 Inhaltsverzeichnis
-1. [Über das Projekt](#-über-das-projekt)
-2. [Die Architektur im Hintergrund](#-die-architektur-im-hintergrund)
-3. [Systemvoraussetzungen](#-systemvoraussetzungen)
-4. [API-Keys und Credentials (Schritt-für-Schritt)](#-api-keys-und-credentials)
+## 📖 Table of Contents
+1. [About the Project](#-about-the-project)
+2. [Background Architecture](#-background-architecture)
+3. [System Requirements](#-system-requirements)
+4. [API Keys and Credentials (Step-by-Step)](#-api-keys-and-credentials)
 5. [Installation & Setup](#-installation--setup)
-6. [Trading starten](#-trading-starten)
-7. [Disclaimer & Sicherheit](#-disclaimer--sicherheit)
+6. [Start Trading](#-start-trading)
+7. [Disclaimer & Security](#-disclaimer--security)
 
 ---
 
-## 🧠 Über das Projekt
+## 🧠 About the Project
 
-Der **Polymarket Claude Sniper** ist mehr als nur ein einfaches Trading-Skript. Er nutzt Anthropic's fortschrittliche Entwicklerumgebung *Claude Code* als kognitiven Motor. Anstatt harte "Wenn-Dann"-Regeln zu verwenden, greift die KI über sogenannte **Model Context Protocol (MCP)** Server live auf Blockchain- und Kryptodaten zu.
+The **Polymarket Claude Sniper** is more than just a simple trading script. It utilizes Anthropic's advanced developer environment *Claude Code* as its cognitive engine. Instead of relying on hardcoded "if-then" rules, the AI accesses live blockchain and crypto data through **Model Context Protocol (MCP)** servers.
 
-Auf Basis einer tiefgreifenden Architekturanalyse (definiert in `CLAUDE.md`) bewertet der Agent selbstständig die Erfolgswahrscheinlichkeit von Events, kalkuliert das Risiko und führt **vollautomatisch Orders auf Ebene des Polymarket-Orderbooks** aus.
+Based on a profound architectural analysis (defined in `CLAUDE.md`), the agent autonomously evaluates the success probability of events, calculates risks, and executes **fully automated orders directly on the Polymarket orderbook level**.
 
 ---
 
-## 🏗 Die Architektur im Hintergrund
+## 🏗 Background Architecture
 
-Damit du verstehst, was der Bot unter der Haube macht, hier der detaillierte Ablauf:
+To understand what the bot does under the hood, here is the detailed workflow:
 
-1. **Claude Code als Motor:** Der Bot verwendet das offizielle `claude` CLI-Tool. Wir starten Claude im Terminal außerhalb der regulären Beschränkungen (`--dangerously-skip-permissions`), damit er vollständig autonom handeln kann.
-2. **Endlos-Makro (`live_macro.ps1`):** Da LLMs normalerweise auf User-Input warten, simuliert dieses PowerShell-Skript in einem Loop von 90 Sekunden einen echten User. Es tippt fortlaufend den Befehl ein, den Markt anhand der Strategie neu zu evaluieren.
+1. **Claude Code as the Engine:** The bot uses the official `claude` CLI tool. We launch Claude in the terminal bypassing standard restrictions (`--dangerously-skip-permissions`) so it can operate completely autonomously.
+2. **Infinite Macro (`live_macro.ps1`):** Since LLMs typically wait for user input, this PowerShell script simulates a real user by running a continuous loop every 90 seconds. It continuously sends a prompt instructing the AI to re-evaluate the market based on its given strategy.
 3. **MCP Server Integration:** 
-   - **Binance MCP (Python):** Liefert Echtzeit-Volatilitätsdaten zu Kryptos wie BTC, ETH oder SOL.
-   - **Polymarket MCP (Node.js):** Übersetzt die KI-Entscheidungen in tatsächliche On-Chain-Transaktionen via Polygon.
-4. **Order-Logik:** Die KI prüft die Markttiefe, wählt Events mit einem Mindest-Score (z.B. > 35) aus und platziert strategische `UP` oder `DOWN` Limits direkt im Orderbuch mithilfe deiner Wallet-Signatur.
+   - **Binance MCP (Python):** Provides real-time volatility data for cryptos like BTC, ETH, or SOL.
+   - **Polymarket MCP (Node.js):** Translates AI decisions into actual on-chain transactions via Polygon.
+4. **Order Logic:** The AI analyzes market depth, selects events with a minimum score (e.g., > 35), and places strategic `UP` or `DOWN` limits directly into the orderbook using your wallet signature.
 
 ---
 
-## 🛠 Systemvoraussetzungen
+## 🛠 System Requirements
 
-Um den Sniper reibungslos auf deinem PC auszuführen, müssen folgende Abhängigkeiten systemweit installiert sein:
+To run the sniper smoothly on your PC, the following dependencies must be installed system-wide:
 
-* **Node.js** (v18.x oder neuer) - *Erforderlich für den Polymarket MCP Server*
-* **Python** (v3.10 oder neuer) - *Erforderlich für den Binance MCP Server und Backend-Tools*
-* **Claude Code CLI** - *Die Anthropic CLI*
+* **Node.js** (v18.x or newer) - *Required for the Polymarket MCP Server*
+* **Python** (v3.10 or newer) - *Required for the Binance MCP Server and backend tools*
+* **Claude Code CLI** - *The Anthropic CLI environment*
   ```bash
   npm install -g @anthropic-ai/claude-code
   ```
-* **Git** - *Für sauberes Repository-Management*
+* **Git** - *For clean repository management*
 
 ---
 
-## 🔑 API-Keys und Credentials
+## 🔑 API Keys and Credentials
 
-Für den vollautomatisierten Handel benötigt der Bot eine Reihe von Berechtigungen und Zugängen. **Alle Schlüssel bleiben lokal auf deinem PC und werden ausschließlich an die offiziellen APIs der Börsen gesendet.**
+For fully automated trading, the bot requires specific permissions and access points. **All keys remain entirely local on your PC and are only transmitted to the official exchange APIs.**
 
-### 1. Polymarket Keys (Trading & Signierung)
-**Wofür gebraucht?** Um Kauf- und Verkaufsorders in deinem Namen abzuwickeln.
-* **Bezugsquelle:** Gehe auf [Polymarket.com](https://polymarket.com/) und logge dich ein.
-* Gehe oben rechts auf dein **Profil** > **Settings** (oder Wallet Export).
-* **Private Key:** Exportiere den Schlüssel (Sieht aus wie `0xabc123...`). **NIEMALS TEILEN!**
-* **Funder / Public Address:** Kopiere deine öffentliche Einzahlungsadresse (z.B. `0x721...`).
+### 1. Polymarket Keys (Trading & Signing)
+**Purpose:** To execute buy and sell orders on your behalf.
+* **Source:** Go to [Polymarket.com](https://polymarket.com/) and log in.
+* Navigate to your **Profile** > **Settings** (or Wallet Export) in the top right corner.
+* **Private Key:** Export your key (Looks like `0xabc123...`). **NEVER SHARE THIS!**
+* **Funder / Public Address:** Copy your public deposit address (e.g., `0x721...`).
 
-### 2. Polygon RPC URL (Blockchain Verbindung)
-**Wofür gebraucht?** Polymarket basiert auf dem Polygon-Netzwerk. Eine schnelle RPC-Node stellt sicher, dass der Bot nicht an Lags öffentlicher Server scheitert.
-* **Bezugsquelle:** Erstelle einen Account bei [Alchemy](https://dashboard.alchemy.com/).
-* Klicke auf **Create new App**.
-* Wähle als Chain **Polygon** und als Network **Polygon Mainnet**.
-* Klicke in deinem neuen Projekt auf **API Keys** und kopiere die HTTPS-URL.
+### 2. Polygon RPC URL (Blockchain Connection)
+**Purpose:** Polymarket runs on the Polygon network. A fast RPC node ensures the bot isn't hindered by the lag of public servers.
+* **Source:** Create an account at [Alchemy](https://dashboard.alchemy.com/).
+* Click on **Create new App**.
+* Select **Polygon** as the chain and **Polygon Mainnet** as the network.
+* Go to your new project's **API Keys** and copy the HTTPS URL.
   ```text
-  Format: https://polygon-mainnet.g.alchemy.com/v2/DEIN_API_KEY
+  Format: https://polygon-mainnet.g.alchemy.com/v2/YOUR_API_KEY
   ```
 
-### 3. Binance API Keys (Marktdaten)
-**Wofür gebraucht?** Der Bot analysiert Krypto-Kurse und Orderbücher bei Binance, um Ableitungen für Polymarket-Prognosen zu treffen (z.B. Bitcoin-Preise in der Zukunft). Für diese Daten brauchen wir Lese-Rechte.
-* **Bezugsquelle:** Logge dich auf [Binance](https://www.binance.com/) ein.
-* Gehe ins Profil zu **API Management**.
-* Erstelle eine neue API. **WICHTIG:** Du brauchst *nur* Lese-Rechte (`Read Only`). Aktiviere *kein* Trading auf Binance.
-* Kopiere den **API Key** und den **Secret Key**.
+### 3. Binance API Keys (Market Data)
+**Purpose:** The bot analyzes crypto prices and orderbooks on Binance to derive forecasts for Polymarket events (e.g., future Bitcoin prices). We only need read permissions for this data.
+* **Source:** Log into [Binance](https://www.binance.com/).
+* Go to your profile and access **API Management**.
+* Create a new API. **IMPORTANT:** You only need `Read Only` permissions. Do *not* enable spot/margin trading.
+* Copy both the **API Key** and the **Secret Key**.
 
 ---
 
 ## 🚀 Installation & Setup
 
-Um alle Variablen nahtlos miteinander zu verknüpfen, haben wir ein intelligentes Installations-Skript geschrieben. Dies verhindert menschliche Fehler beim Editieren von Config-Dateien.
+To seamlessly link all variables, we have written an intelligent installation script. This prevents human errors when editing config files manually.
 
-1. **Klone das Repository in deinen Wunsch-Ordner:**
+1. **Clone the repository to your desired folder:**
    ```bash
    git clone https://github.com/LuiInventions/polymarket-claude-sniper.git
    cd polymarket-claude-sniper
    ```
 
-2. **Starte den Installer:**
-   Mache einen **Rechtsklick auf `setup.ps1`** und wähle **Mit PowerShell ausführen** (bzw. navigiere im Terminal dorthin und führe `./setup.ps1` aus).
+2. **Run the installer:**
+   **Right-click on `setup.ps1`** and select **Run with PowerShell** (or navigate there in your terminal and execute `./setup.ps1`).
 
-3. **Dem Setup folgen:**
-   Das Skript wird dich interaktiv durch die Einrichtung führen:
-   * Es fragt alle oben gesammelten **API-Keys** ab.
-   * Es fragt nach dem **KI-Modell** deiner Wahl. *(Empfehlung: `claude-3-7-sonnet-20250219` für maximale strategische Intelligenz)*
-   * Es erstellt die versteckten Umgebungsvariablen (`.env` und `.mcp.json`).
-   * Es installiert alle Python-Packages (`requirements.txt`).
-   * Es kompiliert die Node.js Repositories im Hintergrund via `npm install` und `npm run build`.
-
----
-
-## 🎯 Trading starten
-
-Sobald das Setup fehlerfrei durchgelaufen ist, bist du bereit!
-
-1. Klicke doppelt auf die Datei `run.bat`.
-2. Es öffnen sich zwei Dinge:
-   * Ein **Terminal-Fenster ("Claude-LiveBot")**, das die Claudeumgebung in diesem Ordner initialisiert.
-   * Ein **PowerShell-Makro im Hintergrund**, das nach 5 Sekunden das Terminal fokussiert und den initialen Trading-Prompt absendet.
-3. Lehne dich zurück. Claude analysiert nun das Setup, lädt die MCP-Tools und sucht aktiv nach profitablen Setups auf Polymarket.
-
-*(Falls du den Bot stoppen willst: Schließe das Terminal und drücke im anderen Fenster `STRG + C`)*
+3. **Follow the setup wizard:**
+   The script will interactively guide you through the setup process:
+   * It will ask for all the **API keys** gathered above.
+   * It will ask for your preferred **AI Model**. *(Recommendation: `claude-3-7-sonnet-20250219` for maximum strategic intelligence)*
+   * It safely generates the hidden environment variables (`.env` and `.mcp.json`).
+   * It installs all Python packages (`requirements.txt`).
+   * It compiles the Node.js repositories in the background using `npm install` and `npm run build`.
 
 ---
 
-## 🛡️ Disclaimer & Sicherheit
+## 🎯 Start Trading
 
-* **Portabilität:** Das Repository ist absolut portabel programmiert. Es gibt **keine hardcodierten Pfade** (wie `C:\Users\...`), die Skripte lösen Systempfade lokal auf.
-* **Privatsphäre:** Dank `.gitignore` sind Dateien wie `.env` und `.mcp.json` gesperrt. Deine privaten Schlüssel werden niemals auf GitHub hochgeladen, falls du einen eigenen Fork deines Setups erstellst.
-* **Risk Warning:** Dieser Bot agiert mit echtem Geld auf Basis algorithmischer KI-Modelle. Märkte sind unvorhersehbar. Du handelst auf eigenes Risiko. Weder die Entwickler noch Anthropic übernehmen Haftung für finanzielle Verluste.
+Once the setup is completed without errors, you are ready to go!
+
+1. Double-click the `run.bat` file.
+2. Two things will happen simultaneously:
+   * A **Terminal window ("Claude-LiveBot")** opens, initializing the Claude environment in this folder.
+   * A **PowerShell macro runs in the background**, focusing on the terminal after 5 seconds and typing the initial trading prompt.
+3. Sit back and relax. Claude is now analyzing your setup, loading the MCP tools, and actively searching for profitable setups on Polymarket.
+
+*(If you want to stop the bot: Simply close the terminal window and press `CTRL + C` in the other window)*
+
+---
+
+## 🛡️ Disclaimer & Security
+
+* **Portability:** The repository is programmed to be completely portable. There are **no hardcoded paths** (like `C:\Users\...`); the scripts resolve system paths locally.
+* **Privacy:** Thanks to `.gitignore`, files like `.env` and `.mcp.json` are excluded from tracking. Your private keys will never be uploaded to GitHub, even if you create your own fork of this setup.
+* **Risk Warning:** This bot trades with real money based on algorithmic AI models. Markets are entirely unpredictable. You trade at your own risk. Neither the developers nor Anthropic assume any liability for financial losses.
 
 ---
 *Happy Sniping! 🎯*
