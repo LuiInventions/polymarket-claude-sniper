@@ -86,7 +86,7 @@ To seamlessly link all variables, we have written an intelligent installation sc
 
 1. **Clone the repository to your desired folder:**
    ```bash
-   git clone https://github.com/LuiInventions/polymarket-claude-sniper.git
+   git clone https://github.com/LuiInventions/polymarket-claude-sniper
    cd polymarket-claude-sniper
    ```
 
