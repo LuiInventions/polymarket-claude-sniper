@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "binance": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["./mcp_servers/binance-mcp/run_server.py"],
+      "env": {
+        "BINANCE_API_KEY": "your_binance_key",
+        "BINANCE_SECRET_KEY": "your_binance_secret"
+      }
+    },
+    "polymarket": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": ["/c", "node", "./mcp_servers/polymarket-mcp/dist/index.js"],
+      "env": {
+        "POLYMARKET_PRIVATE_KEY": "your_poly_key",
+        "POLYMARKET_KEY": "your_poly_key",
+        "POLYMARKET_FUNDER": "your_funder_address",
+        "POLYMARKET_RPC_URL": "your_rpc_url",
+        "CHAIN_ID": "137",
+        "CLOB_HOST": "https://clob.polymarket.com"
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+.env
+.mcp.json
+logs/
+__pycache__/
+*.pyc
+node_modules/
+mcp_servers/binance-mcp/.venv/
+mcp_servers/polymarket-mcp/node_modules/
+mcp_servers/polymarket-mcp/dist/
+type_macro.ps1
+live_macro.ps1
+.env.backup
+.mcp.json.backup
