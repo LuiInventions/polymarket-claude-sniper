@@ -38,7 +38,7 @@ To understand what the bot does under the hood, here is the detailed workflow:
 
 ## 🛠 System Requirements
 
-To run the sniper smoothly on your PC, the following dependencies must be installed system-wide:
+To run the sniper smoothly on your PC, the following base applications must be installed system-wide **(Note: The actual dependencies for the bot itself are installed automatically by the setup script later on):**
 
 * **Node.js** (v18.x or newer) - *Required for the Polymarket MCP Server*
 * **Python** (v3.10 or newer) - *Required for the Binance MCP Server and backend tools*
@@ -98,8 +98,7 @@ To seamlessly link all variables, we have written an intelligent installation sc
    * It will ask for all the **API keys** gathered above.
    * It will ask for your preferred **AI Model**. *(Recommendation: `claude-3-7-sonnet-20250219` for maximum strategic intelligence)*
    * It safely generates the hidden environment variables (`.env` and `.mcp.json`).
-   * It installs all Python packages (`requirements.txt`).
-   * It compiles the Node.js repositories in the background using `npm install` and `npm run build`.
+   * **Automated Dependency Installation:** The script takes care of downloading and installing all required Python dependencies (via `pip`) and Node.js dependencies (via `npm`), and builds the repositories in the background. You do not have to manually run any download commands.
 
 ---
 
